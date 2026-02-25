@@ -5,7 +5,7 @@ class TaskManager:
     def __init__(self, tests_dir: str = "tests"):
         self.tests_dir = os.path.abspath(tests_dir)
         self.task_data: Dict = {
-            "greedy": {"description": "Считайте два целых числа A и B. Выведите их сумму."},
+            "greedy": {"description": "Считайте число N. В следующей строке считайте N целых чисел. Выведите их сумму."},
             "sorting": {"description": "Считайте число N. В следующей строке считайте N целых чисел. Выведите их отсортированными по возрастанию."},
             "dp": {"description": "Считайте число N. В следующей строке считайте N целых чисел. Найдите максимальную сумму подмассива."}
         }

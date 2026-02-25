@@ -9,7 +9,6 @@ class Judge0Client:
     def __init__(self, base_url: str = "http://localhost:2358", timeout: float = 20.0):
         self.base_url = base_url.rstrip("/")
         self.lang_ids: Dict[str, int] = {}
-        # keep a reasonably permissive timeout for network and execution
         self._client = httpx.AsyncClient(timeout=timeout)
 
     async def close(self):
@@ -53,7 +52,6 @@ class Judge0Client:
             logger.debug("Judge0 response status: %s", r.status_code)
             r.raise_for_status()
             jres = r.json()
-            # Log a compact summary of the response for debugging
             try:
                 status = jres.get('status', {})
                 logger.info("Judge0 result: status=%s id=%s time=%s memory=%s",
