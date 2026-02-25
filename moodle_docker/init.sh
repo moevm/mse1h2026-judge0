@@ -1,5 +1,5 @@
 #!/bin/bash
-# init.sh - Автоматическая настройка Moodle (Final Fix)
+# init.sh - Автоматическая настройка Moodle
 
 echo "[Auto-Init] Waiting for Moodle to be fully installed..."
 while ! php /opt/bitnami/moodle/admin/cli/cfg.php --name=lang >/dev/null 2>&1; do
@@ -64,22 +64,20 @@ if [ ! -d "$CR_DIR" ] || [ ! -d "$BEH_DIR" ]; then
 
     echo "[Auto-Init] Copying plugins to Moodle directory..."
     
-    # Находим точные имена папок, которые распаковались
     SRC_BEH=$(ls -d /tmp/moodle-qbehaviour_adaptive_adapted_for_coderunner-*)
     SRC_CR=$(ls -d /tmp/moodle-qtype_coderunner-*)
 
-    # Удаляем старые версии в целевой папке
     rm -rf "$BEH_DIR" "$CR_DIR"
 
-    # Используем копирование (cp -r) вместо перемещения (mv), это надежнее в Docker
-    # И сразу переименовываем в нужные папки
     if [ -n "$SRC_BEH" ]; then cp -r "$SRC_BEH" "$BEH_DIR"; fi
     if [ -n "$SRC_CR" ]; then cp -r "$SRC_CR" "$CR_DIR"; fi
 
-    # ВАЖНО: Исправляем права доступа, чтобы Moodle мог читать файлы
-    # Bitnami обычно использует пользователя с ID 1001, даем права на чтение всем
-    chmod -R 755 "$BEH_DIR" "$CR_DIR" 2>/dev/null
+    # ВАЖНО: Исправляем права доступа, чтобы браузер (сервер) мог читать JS-файлы Ace Editor
     chown -R daemon:root "$BEH_DIR" "$CR_DIR" 2>/dev/null || true
+    find "$BEH_DIR" -type d -exec chmod 755 {} \; 2>/dev/null
+    find "$BEH_DIR" -type f -exec chmod 644 {} \; 2>/dev/null
+    find "$CR_DIR" -type d -exec chmod 755 {} \; 2>/dev/null
+    find "$CR_DIR" -type f -exec chmod 644 {} \; 2>/dev/null
 
     if [ -d "$CR_DIR" ] && [ -d "$BEH_DIR" ]; then
         echo "[Auto-Init] Plugins installed. Running Moodle upgrade..."
@@ -96,7 +94,6 @@ if [ ! -d "$CR_DIR" ] || [ ! -d "$BEH_DIR" ]; then
     rm -f /tmp/beh.zip /tmp/cr.zip
 fi
 
-# Fix permissions on any cache files created during upgrade/cfg scripts as root
 chown -R daemon:root /bitnami/moodledata 2>/dev/null || true
 
 echo "[Auto-Init] Moodle auto-configuration finished!"
