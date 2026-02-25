@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Judge — 3 задачи</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        textarea { resize: vertical; font-family: ui-monospace, monospace; }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 min-h-screen">
+    <div class="max-w-7xl mx-auto p-6">
+        <h1 class="text-4xl font-bold mb-8 text-center">Mini Judge</h1>
+
+        <div class="grid md:grid-cols-3 gap-8">
+
+            <!-- ==================== GREEDY ==================== -->
+            <div class="bg-zinc-900 rounded-2xl p-6 border border-zinc-700" data-task="greedy">
+                <h2 class="text-2xl font-semibold mb-2">Greedy — Сумма двух чисел</h2>
+                <p class="text-zinc-400 mb-6"></p>
+                
+                <div class="flex gap-2 mb-4">
+                    <button onclick="switchLang(this)" class="lang-btn flex-1 py-2 rounded-xl bg-emerald-600 text-white">Python</button>
+                    <button onclick="switchLang(this)" class="lang-btn flex-1 py-2 rounded-xl">C++</button>
+                    <button onclick="switchLang(this)" class="lang-btn flex-1 py-2 rounded-xl">JS</button>
+                </div>
+
+                <textarea class="code w-full h-80 p-4 bg-zinc-950 rounded-xl border border-zinc-600" spellcheck="false"></textarea>
+                
+                <button onclick="runTask(this)" 
+                        class="mt-4 w-full py-4 bg-white text-black font-bold rounded-2xl hover:bg-emerald-400 transition">
+                    Проверить
+                </button>
+
+                <div class="result mt-6 hidden"></div>
+            </div>
+
+            <!-- ==================== SORTING ==================== -->
+            <div class="bg-zinc-900 rounded-2xl p-6 border border-zinc-700" data-task="sorting">
+                <h2 class="text-2xl font-semibold mb-2">Sorting — Отсортировать массив</h2>
+                <p class="text-zinc-400 mb-6"></p>
+                
+                <div class="flex gap-2 mb-4">
+                    <button onclick="switchLang(this)" class="lang-btn flex-1 py-2 rounded-xl bg-emerald-600 text-white">Python</button>
+                    <button onclick="switchLang(this)" class="lang-btn flex-1 py-2 rounded-xl">C++</button>
+                    <button onclick="switchLang(this)" class="lang-btn flex-1 py-2 rounded-xl">JS</button>
+                </div>
+
+                <textarea class="code w-full h-80 p-4 bg-zinc-950 rounded-xl border border-zinc-600" spellcheck="false"></textarea>
+                
+                <button onclick="runTask(this)" 
+                        class="mt-4 w-full py-4 bg-white text-black font-bold rounded-2xl hover:bg-emerald-400 transition">
+                    Проверить
+                </button>
+
+                <div class="result mt-6 hidden"></div>
+            </div>
+
+            <!-- ==================== DP ==================== -->
+            <div class="bg-zinc-900 rounded-2xl p-6 border border-zinc-700" data-task="dp">
+                <h2 class="text-2xl font-semibold mb-2">DP — Максимальная сумма подмассива</h2>
+                <p class="text-zinc-400 mb-6"></p>
+                
+                <div class="flex gap-2 mb-4">
+                    <button onclick="switchLang(this)" class="lang-btn flex-1 py-2 rounded-xl bg-emerald-600 text-white">Python</button>
+                    <button onclick="switchLang(this)" class="lang-btn flex-1 py-2 rounded-xl">C++</button>
+                    <button onclick="switchLang(this)" class="lang-btn flex-1 py-2 rounded-xl">JS</button>
+                </div>
+
+                <textarea class="code w-full h-80 p-4 bg-zinc-950 rounded-xl border border-zinc-600" spellcheck="false"></textarea>
+                
+                <button onclick="runTask(this)" 
+                        class="mt-4 w-full py-4 bg-white text-black font-bold rounded-2xl hover:bg-emerald-400 transition">
+                    Проверить
+                </button>
+
+                <div class="result mt-6 hidden"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
