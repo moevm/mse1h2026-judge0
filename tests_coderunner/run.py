@@ -3,7 +3,7 @@ import sys
 import os
 
 def run_step(command, msg):
-    print(f"\n>>> {msg}...")
+    print(f"\n>>> {msg}")
     res = subprocess.run([sys.executable] + command.split())
     if res.returncode != 0:
         print(f"Error on step: {msg}")
