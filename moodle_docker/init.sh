@@ -72,7 +72,7 @@ if [ ! -d "$CR_DIR" ] || [ ! -d "$BEH_DIR" ]; then
     if [ -n "$SRC_BEH" ]; then cp -r "$SRC_BEH" "$BEH_DIR"; fi
     if [ -n "$SRC_CR" ]; then cp -r "$SRC_CR" "$CR_DIR"; fi
 
-    # ВАЖНО: Исправляем права доступа, чтобы браузер (сервер) мог читать JS-файлы Ace Editor
+    # Изменяем права доступа, чтобы браузер (сервер) мог читать JS-файлы Ace Editor
     chown -R daemon:root "$BEH_DIR" "$CR_DIR" 2>/dev/null || true
     find "$BEH_DIR" -type d -exec chmod 755 {} \; 2>/dev/null
     find "$BEH_DIR" -type f -exec chmod 644 {} \; 2>/dev/null
