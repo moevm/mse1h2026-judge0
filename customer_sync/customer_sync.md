@@ -17,4 +17,4 @@
   - Спиридонов Александр (Разработчик)
 
 - Протоколист: Бескончин Максим
-- Запись встречи: url
+- Запись встречи: https://drive.google.com/drive/folders/1dCpGbIAP-D0yAPnwmvXtxk72HbtZ8GgL
