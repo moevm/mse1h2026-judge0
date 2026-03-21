@@ -44,19 +44,6 @@ services:
       # - MOODLE_ENABLE_HTTPS=no
       # - APACHE_ENABLE_HTTPS=no
 
-    command: |
-      bash -c "
-      /opt/bitnami/scripts/apache/setup.sh;
-      /opt/bitnami/scripts/php/setup.sh;
-      /opt/bitnami/scripts/moodle/setup.sh;
-      if [ -f /scripts/init.sh ]; then
-        cp /scripts/init.sh /tmp/init.sh;
-        sed -i 's/\r$$//' /tmp/init.sh;
-        bash /tmp/init.sh &
-      fi;
-      exec /opt/bitnami/scripts/moodle/run.sh
-      "
-
   jobe:
     image: trampgeek/jobeinabox:latest
     platform: linux/amd64
