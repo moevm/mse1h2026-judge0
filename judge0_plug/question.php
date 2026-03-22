@@ -31,4 +31,8 @@ class qtype_judge0_question extends question_graded_automatically {
     public function get_validation_error(array $response) {
         return '';
     }
+
+    public function get_correct_response() {
+        return array();
+    }
 }
