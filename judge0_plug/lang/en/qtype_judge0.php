@@ -5,3 +5,5 @@ $string['pluginname_link'] = 'question/type/judge0';
 $string['pluginnameadding'] = 'Adding a Judge0 Question';
 $string['pluginnameediting'] = 'Editing a Judge0 Question';
 $string['pluginnamesummary'] = 'Evaluates student code via Judge0.';
+$string['checker_code'] = 'Checker Code';
+$string['checker_code_help'] = 'This code is appended to the student\'s code before execution. Use it to call student functions and print results.';
