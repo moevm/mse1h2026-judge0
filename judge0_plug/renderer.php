@@ -24,8 +24,9 @@ class qtype_judge0_renderer extends qtype_renderer {
         if (!empty($currentAnswer)) {
             if ($state == question_state::$gradedright) {
                 $html .= $this->get_success_box();
-            } else if ($state->is_finished()) {
-                $html .= $this->get_debug_box($question, $currentAnswer);
+            }
+            if ($state->is_finished()) {
+                $html .= $this->get_debug_box($qa, $question);
             }
         }
 
@@ -42,37 +43,90 @@ class qtype_judge0_renderer extends qtype_renderer {
         return $html;
     }
 
-    private function get_debug_box($question, $code) {
-        $full_code = $code . "\n" . $question->checker_code;
-        $base_url = get_config('qtype_judge0', 'server_url') ?: 'http://server:2358';
-        $judge0_url = rtrim($base_url, '/') . '/submissions?base64_encoded=false&wait=true';
-
-        $payload = json_encode(['source_code' => $full_code, 'language_id' => 71, 'expected_output' => $question->expected_output]);
-        $ch = curl_init($judge0_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        $result = curl_exec($ch);
-        curl_close($ch);
-
-        if ($result) {
-            $data = json_decode($result, true);
-            $status = $data['status']['description'] ?? 'Ошибка';
-            $stdout = $data['stdout'] ?? 'Пусто';
-            $stderr = $data['stderr'] ?? '';
-
-            $box = "<div style='background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; margin-top: 15px;'>";
-            $box .= "<h4 style='margin-top:0;'>⚠️ Тесты не пройдены: {$status}</h4>";
-            $box .= "<b>Вывод вашей программы:</b><pre style='background:#f8f9fa; padding:10px; margin:5px 0; border:1px solid #ccc; font-size: 13px;'>".htmlspecialchars($stdout)."</pre>";
-            if ($stderr) {
-                $box .= "<b>Ошибки выполнения (Python):</b><pre style='background:#f8d7da; color:#721c24; padding:10px; margin:5px 0; font-size: 13px;'>".htmlspecialchars($stderr)."</pre>";
-            }
-            $box .= "<b>Ожидалось:</b><pre style='background:#e2e3e5; padding:10px; margin:5px 0; font-size: 13px;'>".htmlspecialchars($question->expected_output)."</pre>";
-            $box .= "</div>";
-            return $box;
+    private function get_debug_box(question_attempt $qa, $question) {
+        $stored = $qa->get_last_qt_var('_judge0_result', '');
+        $data = json_decode($stored, true);
+        
+        if (empty($data) && !empty($question->last_judge0_response)) {
+            $data = $question->last_judge0_response;
         }
-        return "";
+
+        if (empty($data)) {
+            return '';
+        }
+
+        if (isset($data['status'])) {
+            $data = [$data];
+        }
+
+        $box = "<div style='margin-top: 15px;'>";
+        $box .= "<h4 style='color: #856404;'>Результаты тестирования:</h4>";
+        
+        $box .= "<table style='width: 100%; border-collapse: collapse; margin-bottom: 15px;'>";
+        $box .= "<tr style='background-color: #f8f9fa; border-bottom: 2px solid #dee2e6;'>";
+        $box .= "<th style='padding: 8px; text-align: left;'>Тест</th>";
+        $box .= "<th style='padding: 8px; text-align: left;'>Ввод (stdin)</th>";
+        $box .= "<th style='padding: 8px; text-align: left;'>Ожидалось</th>";
+        $box .= "<th style='padding: 8px; text-align: left;'>Ваш вывод</th>";
+        $box .= "<th style='padding: 8px; text-align: left;'>Статус</th>";
+        $box .= "</tr>";
+
+        $test_num = 1;
+        foreach ($data as $res) {
+            $status = $res['status']['description'] ?? 'Ошибка';
+            $status_id = $res['status']['id'] ?? 0;
+            $stdout = $res['stdout'] ?? '';
+            $stderr = $res['stderr'] ?? '';
+            
+            $is_hidden = false;
+            $input = '';
+            $expected = $question->expected_output ?? ''; 
+
+            $is_dynamic = false;
+            if (isset($res['_testcase'])) {
+                $is_hidden = !empty($res['_testcase']['is_hidden']);
+                $is_dynamic = !empty($res['_testcase']['is_dynamic']);
+                $input = $res['_testcase']['input'];
+                $expected = $res['_testcase']['expected'];
+            }
+
+            if ($status_id == 3) {
+                $status_html = "<span style='color: #28a745; font-weight: bold;'>✅ " . htmlspecialchars($status) . "</span>";
+            } else {
+                $status_html = "<span style='color: #dc3545; font-weight: bold;'>❌ " . htmlspecialchars($status) . "</span>";
+            }
+
+            if ($is_hidden) {
+                $input_html = "<i>Скрыто</i>";
+                $expected_html = "<i>Скрыто</i>";
+                $stdout_html = "<i>Скрыто</i>";
+            } else {
+                $input_html = "<pre style='margin:0; font-size:12px;'>" . htmlspecialchars($input) . "</pre>";
+                if ($is_dynamic) {
+                    $input_html .= "<div style='font-size:10px; color:#17a2b8; margin-top:2px;'>(Сгенерировано)</div>";
+                }
+                
+                $expected_html = "<pre style='margin:0; font-size:12px;'>" . htmlspecialchars($expected) . "</pre>";
+                $stdout_disp = $stdout ?: '';
+                if ($stderr) {
+                    $stdout_disp .= "\n[STDERR]\n" . $stderr;
+                }
+                if (trim($stdout_disp) === '') $stdout_disp = 'Пусто';
+                $stdout_html = "<pre style='margin:0; font-size:12px;'>" . htmlspecialchars($stdout_disp) . "</pre>";
+            }
+
+            $box .= "<tr style='border-bottom: 1px solid #e9ecef;'>";
+            $box .= "<td style='padding: 8px;'>#" . $test_num . "</td>";
+            $box .= "<td style='padding: 8px;'>" . $input_html . "</td>";
+            $box .= "<td style='padding: 8px;'>" . $expected_html . "</td>";
+            $box .= "<td style='padding: 8px;'>" . $stdout_html . "</td>";
+            $box .= "<td style='padding: 8px;'>" . $status_html . "</td>";
+            $box .= "</tr>";
+            
+            $test_num++;
+        }
+        $box .= "</table></div>";
+
+        return $box;
     }
 }
