@@ -148,8 +148,7 @@ class qtype_judge0_renderer extends qtype_renderer {
         global $CFG;
 
         static $assetsprinted = false;
-        $base = $CFG->wwwroot . '/question/type/judge0/codemirror';
-
+        $base = $CFG->wwwroot . '/question/type/judge0_plug/codemirror';        
         $html = '';
 
         if (!$assetsprinted) {
