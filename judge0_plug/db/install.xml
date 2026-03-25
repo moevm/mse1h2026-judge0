@@ -8,8 +8,26 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Foreign key to question table"/>
+        <FIELD NAME="language_id" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="71" SEQUENCE="false" COMMENT="Judge0 language ID"/>
         <FIELD NAME="checker_code" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Teacher test code"/>
         <FIELD NAME="expected_output" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Expected exact output from Judge0"/>
+        <FIELD NAME="reference_solution" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Teacher reference solution"/>
+        <FIELD NAME="input_generator_code" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Script to generate dynamic input per student"/>
+        <FIELD NAME="input_generator_language_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Language ID for input generator"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="questionid" TYPE="foreign" FIELDS="questionid" REFTABLE="question" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="qtype_judge0_testcases" COMMENT="Test cases for judge0 questions">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="questionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Foreign key to question table"/>
+        <FIELD NAME="test_input" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Standard input for the test case"/>
+        <FIELD NAME="expected_output" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Expected standard output, can be null if dynamically computed"/>
+        <FIELD NAME="is_hidden" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 if the test case is hidden from the student"/>
+        <FIELD NAME="weight" TYPE="number" LENGTH="10" NOTNULL="true" DEFAULT="1.0" SEQUENCE="false" DECIMALS="5" COMMENT="Weight or score of this test case"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
