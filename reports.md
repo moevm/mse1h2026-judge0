@@ -80,9 +80,9 @@ https://drive.google.com/drive/folders/1dCpGbIAP-D0yAPnwmvXtxk72HbtZ8GgL
 
 ## Итерация №2
 ### Презентация
-
+https://docs.google.com/presentation/d/1w81xGnQDcJMihZPV8g90Dy_wVVDn5dw6rMZZoKrXK3c/edit?usp=sharing
 ### Скринкасты
-
+https://drive.google.com/file/d/1nsiPzZMp2bStZ2hB9t99yv7YmuDDk7yW/view?usp=drive_link
 ### Запись встречи
 https://drive.google.com/file/d/1SynwfrhT_bVh6MepgKYx2FclTnLbORZz
 
