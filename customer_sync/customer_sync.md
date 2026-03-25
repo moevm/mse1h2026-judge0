@@ -36,3 +36,4 @@
 
 - Протоколист: Бескончин Максим
 - Запись встречи: https://drive.google.com/file/d/1SynwfrhT_bVh6MepgKYx2FclTnLbORZz
+- Протокол: https://github.com/moevm/mse1h2026-judge0/blob/reports/docs/%D1%81%D0%BE%D0%B7%D0%B2%D0%BE%D0%BD_02_03_2026.md
