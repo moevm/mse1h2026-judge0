@@ -1,4 +1,4 @@
-# mse1h2026-judge0
+<img width="1168" height="181" alt="изображение" src="https://github.com/user-attachments/assets/1306213a-ed08-4933-9403-3df8f8d8e1e7" /># mse1h2026-judge0
 ## О проекте
 Проект предполагает интеграцию системы judge0 на замену текущей coderunner, для тестирования ее работы и совместимости с moodle.
 
@@ -16,41 +16,72 @@
 
 ### Инструкция по запуску
 #### Развертывание контейнеров
-- Перейдите в корневую директорию проекта, затем в директорию moodle_docker
- ```bash
-   cd mse1h2026-judge0/moodle_docker
-   ```
-- Выполните команду для сборки всех контейнеров
+- Перейдите в ветку проекта develop/moodle_docker
+  Перед запуском докер контейнера с moodle и judge0 необходимо выполнить следующие настройки системы
+  
+  We recommend using Ubuntu 22.04, on which you need to do the following update of GRUB:
+
+    Use sudo to open file /etc/default/grub
+    Add systemd.unified_cgroup_hierarchy=0 in the value of GRUB_CMDLINE_LINUX variable.
+    Apply the changes: sudo update-grub
+    Restart your server: sudo reboot
+
+- Выполните команду для сборки контейнера mse1h2026-judge0/docker-compose.yml
 ```bash
-   docker compose up -d
+   docker compose up
    ```
-- Выполните скрипт инициализации
-```bash
-  chmod +x init.sh
-   ./init.sh
-   ```
+Далее необходимо устновить плагин judge0_plug.zip 
 #### Настройка плагина в Moodle
 - Откройте браузер и перейдите по адресу: [http://localhost](http://localhost).
 - Авторизуйтесь под учетной записью администратора:
    - **Логин:** `admin`
    - **Пароль:** `bitnami1`
-- Перейдите в раздел управления плагинами: `Администрирование` -> `Плагины` -> `Установка плагинов`.
-- Нажмите **"Обновить базу данных Moodle"**.
+- Перейдите в раздел управления плагинами: `Site administration` -> `plugins` -> `install plugins` -> `Выбираем judge0_plug.zip` -> `Install plugin from zip_file` -> `Далее нажимаем на продолжить и обновить базу данных`
 
-#### Подключение Judge0
-- В Moodle перейдите: `Администрирование` -> `Плагины` -> `Типы вопросов` -> `Judge0` (или `Настройки Judge0`).
-- Найдите поле **URL сервера Judge0**.
-- Впишите туда сетевое имя контейнера Judge0:
-   ```text
-   http://server:2358
-   ```
+После успешной установки необходимо создать задачу с judge0
 
-#### Проверка работоспособности среды
-Дополнительно в проектом имеется Bash-скрипт, который автоматически проверяет, все ли поднялось корректно.
-Выполните:
-```bash
-bash tests/test_environment.sh
+1) Создаем курс
+2) Включаем Edit mode в правом верхнем углу
+3) Нажимам на + под Announcements -> далее выбираем activity or resource -> Quize
+4) Далее даем имя -> Нажимаем на question behavior -> В How questions behave выбираем Interactive with multiple tries.
+5) Далее нажимаем на синюю кнопку Save and display
+6) Нажимем на add quetion
+7) Далее выбираем выпадющее окно Add (под параметром Shuffle) -> a new question -> Judge0 code evaluator -> Add
+8) Указываем имя и текст задачи
+
+Далее объясние логики работы
+
+Есть два поля - Checker Code и Expected Output. 
+
+1) Checker Code  - необходим чтобы вывать функцию решение.
+2) Expected Output - проерка вывода функции решения
+
+Пример:
+
+Решение студента:
+```python3
+def solve(x):
+   print(x + x) 
 ```
+Checker Code:
+
+```
+solve(2)
+solve(5)
+```
+Expected Output:
+
+```
+4
+10
+```
+Для простоты проверки работоспособности планина достаточно просто Checker Code оставить пустым, в Expected Output написать `1`, а в решении просто написать ```print(1)```
+
+Когда поля заполнены, далее:
+
+9) Save changes
+10) Выбираем вкладку quize и решаем задачу
+
 
 ## Итерация №1
 ### Презентация
