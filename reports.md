@@ -15,7 +15,7 @@
 
 ### Инструкция по запуску
 #### Развертывание контейнеров
-- Перейдите в ветку проекта develop/moodle_docker
+- Перейдите в ветку проекта ```develop/moodle_docker```
   Перед запуском докер контейнера с moodle и judge0 необходимо выполнить следующие настройки системы
   
   We recommend using Ubuntu 22.04, on which you need to do the following update of GRUB: <br>
