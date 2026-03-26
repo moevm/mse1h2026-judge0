@@ -44,7 +44,7 @@
 3) Нажимам на + под Announcements -> далее выбираем activity or resource -> Quize
 4) Далее даем имя -> Нажимаем на question behavior -> В How questions behave выбираем Interactive with multiple tries.
 5) Далее нажимаем на синюю кнопку Save and display
-6) Нажимем на add quetion
+6) Нажимем на add question
 7) Далее выбираем выпадющее окно Add (под параметром Shuffle) -> a new question -> Judge0 code evaluator -> Add
 8) Указываем имя и текст задачи
 
