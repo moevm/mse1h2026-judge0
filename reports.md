@@ -1,4 +1,3 @@
-<img width="1168" height="181" alt="изображение" src="https://github.com/user-attachments/assets/1306213a-ed08-4933-9403-3df8f8d8e1e7" /># mse1h2026-judge0
 ## О проекте
 Проект предполагает интеграцию системы judge0 на замену текущей coderunner, для тестирования ее работы и совместимости с moodle.
 
