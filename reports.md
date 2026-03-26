@@ -18,12 +18,12 @@
 - Перейдите в ветку проекта develop/moodle_docker
   Перед запуском докер контейнера с moodle и judge0 необходимо выполнить следующие настройки системы
   
-  We recommend using Ubuntu 22.04, on which you need to do the following update of GRUB:
+  We recommend using Ubuntu 22.04, on which you need to do the following update of GRUB: <br>
 
-    Use sudo to open file /etc/default/grub
-    Add systemd.unified_cgroup_hierarchy=0 in the value of GRUB_CMDLINE_LINUX variable.
-    Apply the changes: sudo update-grub
-    Restart your server: sudo reboot
+    1) Use sudo to open file /etc/default/grub
+    2) Add systemd.unified_cgroup_hierarchy=0 in the value of GRUB_CMDLINE_LINUX variable.
+    3) Apply the changes: sudo update-grub
+    4) Restart your server: sudo reboot
 
 - Выполните команду для сборки контейнера mse1h2026-judge0/docker-compose.yml
 ```bash
