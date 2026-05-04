@@ -7,16 +7,54 @@ class qtype_judge0_renderer extends qtype_renderer {
         $currentAnswer = $qa->get_last_qt_var('answer', '');
         $inputname = $qa->get_qt_field_name('answer');
 
+        $safe_id = str_replace(':', '_', $inputname);
+        $container_id = 'monaco_container_' . $safe_id;
+        $textarea_id = 'hidden_textarea_' . $safe_id;
 
         $html = html_writer::tag('div', $question->format_questiontext($qa), array('class' => 'qtext'));
         
         $html .= html_writer::start_tag('div', array('style' => 'margin-top: 15px; position: relative;'));
-        $html .= html_writer::tag('textarea', htmlspecialchars($currentAnswer), array(
-            'name' => $inputname,
-            'rows' => 10,
-            'style' => 'width: 100%; font-family: "Courier New", monospace; background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; border: 2px solid #333; outline: none; resize: vertical;',
-            'spellcheck' => 'false'
+
+        $html .= html_writer::tag('div', '', array(
+            'id' => $container_id,
+            'style' => 'width: 100%; height: 400px; border: 1px solid #ccc; border-radius: 4px; overflow: hidden; background: #1e1e1e;'
         ));
+
+        
+        $html .= html_writer::tag('textarea', htmlspecialchars($currentAnswer), array(
+            'id' => $textarea_id,
+            'name' => $inputname,
+            'style' => 'display: none;' // Полностью скрываем поле
+        ));
+
+        $js = "
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js'></script>
+        <script>
+            require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs' }});
+            require(['vs/editor/editor.main'], function() {
+                var container = document.getElementById('{$container_id}');
+                var hiddenInput = document.getElementById('{$textarea_id}');
+
+                // Создаем редактор
+                var editor = monaco.editor.create(container, {
+                    value: hiddenInput.value,    
+                    language: 'py',             
+                    theme: 'vs-dark',
+                    automaticLayout: true,      
+                    fontSize: 14,
+                    minimap: { enabled: false }, 
+                    scrollBeyondLastLine: false
+                });
+
+                // Синхронизируем код со скрытым полем при каждом изменении
+                editor.onDidChangeModelContent(function() {
+                    hiddenInput.value = editor.getValue();
+                });
+            });
+        </script>
+        ";
+        $html .= $js;
+
         $html .= html_writer::end_tag('div');
 
         $state = $qa->get_state();

@@ -3,6 +3,16 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/questionlib.php');
 
 class qtype_judge0 extends question_type {
+
+
+    public function menu_name() {
+        return get_string('pluginname', 'qtype_judge0');
+    }
+     
+    public function can_be_created_by_user() {
+        return true;
+    }
+
     
     public function extra_question_fields() {
         return array('qtype_judge0_options', 'language_id', 'checker_code', 'expected_output', 'reference_solution', 'input_generator_code', 'input_generator_language_id');
