@@ -45,15 +45,6 @@ services:
       - MOODLE_LANGUAGE=ru
     restart: always
 
-  jobe:
-    image: trampgeek/jobeinabox:latest
-    platform: linux/amd64
-    ports:
-      - '8081:80'
-    environment:
-      - TZ=UTC
-    restart: always
-
 # ОБЩИЕ ДАННЫЕ 
 volumes:
   mariadb_data:
