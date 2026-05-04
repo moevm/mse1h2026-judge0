@@ -38,7 +38,7 @@ class qtype_judge0_renderer extends qtype_renderer {
                 // Создаем редактор
                 var editor = monaco.editor.create(container, {
                     value: hiddenInput.value,    
-                    language: 'py',             
+                    language: 'python',             
                     theme: 'vs-dark',
                     automaticLayout: true,      
                     fontSize: 14,
