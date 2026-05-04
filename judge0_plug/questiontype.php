@@ -20,37 +20,65 @@ class qtype_judge0 extends question_type {
 
     public function save_question_options($formdata) {
         global $DB;
-        $result = parent::save_question_options($formdata);
-        if ($result !== true) {
-            return $result;
-        }
+        
+        parent::save_question_options($formdata);
 
         $DB->delete_records('qtype_judge0_testcases', ['questionid' => $formdata->id]);
 
-        if (!empty($formdata->test_input)) {
-            foreach ($formdata->test_input as $key => $input) {
-                if (trim($input) === '' && trim($formdata->test_expected_output[$key]) === '') {
+        $inputs = $formdata->test_input ?? [];
+        $outputs = $formdata->test_expected_output ?? [];
+        $hiddens = $formdata->is_hidden ?? [];
+        $weights = $formdata->weight ?? [];
+
+        if (!empty($inputs)) {
+            foreach ($inputs as $key => $input) {
+                
+                $in_text = is_array($input) ? $input['text'] : $input;
+                $out_raw = $outputs[$key] ?? '';
+                $out_text = is_array($out_raw) ? $out_raw['text'] : $out_raw;
+
+                if (trim($in_text) === '' && trim($out_text) === '') {
                     continue;
                 }
+
                 $tc = new stdClass();
                 $tc->questionid = $formdata->id;
-                $tc->test_input = $input;
-                $tc->expected_output = $formdata->test_expected_output[$key];
-                $tc->is_hidden = !empty($formdata->is_hidden[$key]) ? 1 : 0;
-                $tc->weight = (float)$formdata->weight[$key];
+                $tc->test_input = $in_text;
+                $tc->expected_output = $out_text;
+                $tc->is_hidden = !empty($hiddens[$key]) ? 1 : 0;
+                $tc->weight = isset($weights[$key]) ? (float)$weights[$key] : 1.0;
+                
                 $DB->insert_record('qtype_judge0_testcases', $tc);
             }
         }
+        
         return true;
     }
 
     public function get_question_options($question) {
         global $DB;
-        $result = parent::get_question_options($question);
-        if ($result && isset($question->options)) {
-            $question->options->testcases = $DB->get_records('qtype_judge0_testcases', ['questionid' => $question->id], 'id ASC');
+        parent::get_question_options($question);
+        
+        if (!isset($question->options)) {
+            $question->options = new stdClass();
         }
-        return $result;
+        
+        $testcases = $DB->get_records('qtype_judge0_testcases', ['questionid' => $question->id], 'id ASC');
+        $question->options->testcases = $testcases;
+        
+       
+        if (!empty($testcases)) {
+            $i = 0;
+            foreach ($testcases as $tc) {
+                $question->test_input[$i] = $tc->test_input;
+                $question->test_expected_output[$i] = $tc->expected_output;
+                $question->is_hidden[$i] = $tc->is_hidden;
+                $question->weight[$i] = $tc->weight;
+                $i++;
+            }
+        }
+        
+        return true;
     }
 
     public function initialise_question_instance(question_definition $question, $questiondata) {

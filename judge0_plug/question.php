@@ -125,15 +125,18 @@ class qtype_judge0_question extends question_graded_automatically {
             }
         }
 
+        $step_data = ['_judge0_result' => json_encode($this->last_judge0_response)];
+
         if ($total_weight <= 0) $total_weight = 1.0;
         $fraction = $earned_weight / $total_weight;
 
         if ($passed === $total) {
-            return array($fraction, question_state::$gradedright);
+            return array($fraction, question_state::$gradedright, $step_data);
         } elseif ($passed > 0) {
-            return array($fraction, question_state::$gradedpartial);
+            return array($fraction, question_state::$gradedpartial, $step_data);
         }
-        return array(0.0, question_state::$gradedwrong);
+        
+        return array(0.0, question_state::$gradedwrong, $step_data);
     }
 
     private function send_judge0_request($url, $payload) {
@@ -156,7 +159,18 @@ class qtype_judge0_question extends question_graded_automatically {
         return $result ? json_decode($result, true) : false;
     }
 
-    public function summarise_response(array $response) { return isset($response['answer']) ? $response['answer'] : null; }
+    
+    public function summarise_response(array $response) { 
+        $ans = $response['answer'] ?? '';
+        
+        $data = $this->last_judge0_response ?? [['error' => 'Массив last_judge0_response пуст. grade_response упал с ошибкой.']];
+        
+        $judge_data = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
+        
+        
+        return $ans . '||JUDGE0_DEBUG||' . $judge_data;
+    }
+
     public function is_complete_response(array $response) { return array_key_exists('answer', $response) && $response['answer'] !== ''; }
     public function is_gradable_response(array $response) { return $this->is_complete_response($response); }
     public function is_same_response(array $prevresponse, array $newresponse) { return question_utils::arrays_same_at_key_missing_is_blank($prevresponse, $newresponse, 'answer'); }
