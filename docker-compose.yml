@@ -1,4 +1,12 @@
+x-logging:
+  &default-logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 100M
+
 services:
+  # СЕРВИСЫ MOODLE
   mariadb:
     image: public.ecr.aws/bitnami/mariadb:latest
     platform: linux/amd64
@@ -10,6 +18,7 @@ services:
       - MARIADB_CHARACTER_SET=${MARIADB_CHARACTER_SET:-utf8mb4}
       - MARIADB_COLLATE=${MARIADB_COLLATE:-utf8mb4_unicode_ci}
       - ALLOW_EMPTY_PASSWORD=yes
+    restart: always
 
   moodle:
     image: public.ecr.aws/bitnami/moodle:latest
@@ -23,34 +32,20 @@ services:
     depends_on:
       - mariadb
     environment:
-      # НАСТРОЙКИ БАЗЫ ДАННЫХ
       - MOODLE_DATABASE_HOST=mariadb
       - MOODLE_DATABASE_PORT_NUMBER=3306
       - MOODLE_DATABASE_USER=${MARIADB_USER:-bn_moodle}
       - MOODLE_DATABASE_NAME=${MARIADB_DATABASE:-bitnami_moodle}
       - MOODLE_DATABASE_TYPE=mariadb
       - ALLOW_EMPTY_PASSWORD=yes
-
-      # НАСТРОЙКИ АДМИНА
       - MOODLE_USERNAME=admin
       - MOODLE_PASSWORD=bitnami1
       - MOODLE_EMAIL=user@example.com
-
-      # НАСТРОЙКИ САЙТА 
       - MOODLE_SITENAME=New Site
       - MOODLE_LANGUAGE=ru
-      # ОТКЛЮЧЕНИЕ HTTPS
-      # - MOODLE_ENABLE_HTTPS=no
-      # - APACHE_ENABLE_HTTPS=no
+    restart: always
 
-  jobe:
-    image: trampgeek/jobeinabox:latest
-    platform: linux/amd64
-    ports:
-      - '8081:80'
-    environment:
-      - TZ=UTC
-
+# ОБЩИЕ ДАННЫЕ 
 volumes:
   mariadb_data:
     driver: local
