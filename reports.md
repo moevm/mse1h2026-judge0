@@ -73,6 +73,8 @@ Expected Output:
 9) Save changes
 10) Выбираем вкладку quize и решаем задачу
 
+Пример переноса реальной задачи из курса программирования: [demo/unrolled_list_variant3](demo/unrolled_list_variant3/)
+
 
 ## Итерация №1
 ### Презентация
