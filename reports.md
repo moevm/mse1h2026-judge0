@@ -15,21 +15,9 @@
 
 ### Инструкция по запуску
 #### Развертывание контейнеров
-- Перейдите в ветку проекта ```develop/moodle_docker```
-  Перед запуском докер контейнера с moodle и judge0 необходимо выполнить следующие настройки системы
-  
-  We recommend using Ubuntu 22.04, on which you need to do the following update of GRUB: <br>
-
-    1) Use sudo to open file /etc/default/grub
-    2) Add systemd.unified_cgroup_hierarchy=0 in the value of GRUB_CMDLINE_LINUX variable.
-    3) Apply the changes: sudo update-grub
-    4) Restart your server: sudo reboot
-
-- Выполните команду для сборки контейнера mse1h2026-judge0/docker-compose.yml
-```bash
-   docker compose up
-   ```
-Далее необходимо устновить плагин judge0_plug.zip 
+- Перейдите в ветку проекта ```master```
+- Устнаовить образ убуту [link](https://drive.google.com/drive/u/1/folders/1yaOkhyw99g63MnO0nDXtLBTjpZcPOfGz)
+- Запустите скрипт judge0_script.sh. Затем скопируйте адрес, который скприпт выдал
 #### Настройка плагина в Moodle
 - Откройте браузер и перейдите по адресу: [http://localhost](http://localhost).
 - Авторизуйтесь под учетной записью администратора:
@@ -37,6 +25,10 @@
    - **Пароль:** `bitnami1`
 - Перейдите в раздел управления плагинами: `Site administration` -> `plugins` -> `install plugins` -> `Выбираем judge0_plug.zip` -> `Install plugin from zip_file` -> `Далее нажимаем на продолжить и обновить базу данных`
 
+- Далее в настройке необзодимо указать ссылку который выдал скрипт (полностью), либо вставить эту ссылку https://ce.judge0.com, если возникли проблемы с виртуальной машиной 
+- В Monaco Base Url указать - https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs
+
+  
 После успешной установки необходимо создать задачу с judge0
 
 1) Создаем курс
