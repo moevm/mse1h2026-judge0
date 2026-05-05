@@ -160,6 +160,12 @@ https://drive.google.com/file/d/1SynwfrhT_bVh6MepgKYx2FclTnLbORZz
 10) Подготовка демо — создание 3–5 задач различной сложности (простой ввод-вывод, функции, классы, генератор + идеальное решение) для презентации
 
 ## Итерация №3
+
+### Презентация
+https://docs.google.com/presentation/d/1e3A5K-_yb_dJxYJxLZL051l49dLoOtOUpJytlUlmwTE/edit?usp=sharing
+### Скринкасты и запись встречи
+https://drive.google.com/drive/folders/15-Z8J5ltd_xVVuB_qEK47KNNmM2-QjJC?usp=sharing 
+
 ### Выполненные задачи (по плану)
 1) Переход на асинхронную модель проверки с адаптивным интервалом (0.5с -> 2с) и настраиваемым таймаутом (5–120 сек через `poll_timeout` в настройках)
 2) Добавлен `db/upgrade.php` — миграции БД для обновления плагина, добавление полей `allowed_languages`, `reference_solution_language_id`, `compiler_options`
